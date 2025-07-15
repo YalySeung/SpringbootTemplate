@@ -1,6 +1,7 @@
 package com.sprinboottemplate.springboottempate.dto;
 
 
+import com.sprinboottemplate.springboottempate.domain.ApiResultCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "공통 API 응답 포맷")
+@Schema(name = "BaseResponse", description = "공통 API 응답 포맷")
 public class BaseResponse<T> {
 
     @Schema(description = "응답 코드", example = "200")
@@ -31,5 +32,15 @@ public class BaseResponse<T> {
 
     public static <T> BaseResponse<T> error(int code, String message) {
         return new BaseResponse<>(code, message, null);
+    }
+
+    // ✅ ApiResultCode를 사용한 응답 (data 포함)
+    public static <T> BaseResponse<T> from(ApiResultCode resultCode, T data) {
+        return new BaseResponse<>(resultCode.getCode(), resultCode.getMessage(), data);
+    }
+
+    // ✅ ApiResultCode를 사용한 응답 (data 없이)
+    public static <T> BaseResponse<T> from(ApiResultCode resultCode) {
+        return from(resultCode, null);
     }
 }
