@@ -1,4 +1,4 @@
-package com.sprinboottemplate.springboottempate.domain;
+package com.sprinboottemplate.springboottempate.common;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

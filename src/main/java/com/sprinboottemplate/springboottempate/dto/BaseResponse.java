@@ -1,7 +1,7 @@
 package com.sprinboottemplate.springboottempate.dto;
 
 
-import com.sprinboottemplate.springboottempate.domain.ApiResultCode;
+import com.sprinboottemplate.springboottempate.common.ApiResultCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;

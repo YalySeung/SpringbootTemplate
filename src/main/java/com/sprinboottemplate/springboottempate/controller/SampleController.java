@@ -1,6 +1,6 @@
 package com.sprinboottemplate.springboottempate.controller;
 
-import com.sprinboottemplate.springboottempate.domain.ApiResultCode;
+import com.sprinboottemplate.springboottempate.common.ApiResultCode;
 import com.sprinboottemplate.springboottempate.dto.BaseResponse;
 import com.sprinboottemplate.springboottempate.dto.SampleDto;
 import io.swagger.v3.oas.annotations.Operation;
