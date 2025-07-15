@@ -1,5 +1,6 @@
 package com.sprinboottemplate.springboottempate.controller;
 
+import com.sprinboottemplate.springboottempate.common.ApiException;
 import com.sprinboottemplate.springboottempate.common.ApiResultCode;
 import com.sprinboottemplate.springboottempate.dto.BaseResponse;
 import com.sprinboottemplate.springboottempate.dto.SampleDto;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
-@Tag(name = "Sample API", description = "샘플 CRUD API입니다")
+@Tag(name = "Sample API", description = "샘플 CRUD API 입니다")
 @RestController
 @RequestMapping("/samples")
 public class SampleController {
@@ -26,13 +27,10 @@ public class SampleController {
 
         SampleDto sample = database.get(id);
         if (sample == null) {
-            return ResponseEntity
-                    .status(ApiResultCode.NOT_FOUND.getHttpStatus())
-                    .body(BaseResponse.from(ApiResultCode.NOT_FOUND));
+            throw new ApiException(ApiResultCode.NOT_FOUND, "샘플 ID가 존재하지 않습니다.");
         }
 
-        return ResponseEntity
-                .ok(BaseResponse.from(ApiResultCode.SUCCESS, sample));
+        return ResponseEntity.ok(BaseResponse.from(ApiResultCode.SUCCESS, sample));
     }
 
     @Operation(summary = "이름으로 조회", description = "RequestParam을 사용해 샘플 조회")
@@ -44,18 +42,14 @@ public class SampleController {
                 .filter(s -> s.getName().equalsIgnoreCase(name))
                 .findFirst()
                 .map(sample -> ResponseEntity.ok(BaseResponse.from(ApiResultCode.SUCCESS, sample)))
-                .orElse(ResponseEntity
-                        .status(ApiResultCode.NOT_FOUND.getHttpStatus())
-                        .body(BaseResponse.from(ApiResultCode.NOT_FOUND)));
+                .orElseThrow(() -> new ApiException(ApiResultCode.NOT_FOUND, "해당 이름의 샘플이 없습니다."));
     }
 
     @Operation(summary = "샘플 생성", description = "샘플 데이터를 생성")
     @PostMapping
-    public ResponseEntity<BaseResponse<SampleDto>> createSample(
-            @RequestBody SampleDto request) {
+    public ResponseEntity<BaseResponse<SampleDto>> createSample(@RequestBody SampleDto request) {
         request.setId(idSequence++);
         database.put(request.getId(), request);
-
         return ResponseEntity
                 .status(ApiResultCode.CREATED.getHttpStatus())
                 .body(BaseResponse.from(ApiResultCode.CREATED, request));
@@ -68,9 +62,7 @@ public class SampleController {
             @RequestBody SampleDto request) {
 
         if (!database.containsKey(id)) {
-            return ResponseEntity
-                    .status(ApiResultCode.NOT_FOUND.getHttpStatus())
-                    .body(BaseResponse.from(ApiResultCode.NOT_FOUND));
+            throw new ApiException(ApiResultCode.NOT_FOUND, "수정할 샘플이 존재하지 않습니다.");
         }
 
         request.setId(id);
@@ -80,13 +72,11 @@ public class SampleController {
 
     @Operation(summary = "샘플 삭제", description = "샘플 데이터를 삭제")
     @DeleteMapping("/{id}")
-    public ResponseEntity<BaseResponse> deleteSample(
+    public ResponseEntity<BaseResponse<Void>> deleteSample(
             @Parameter(description = "샘플 ID", example = "1") @PathVariable Long id) {
 
         if (!database.containsKey(id)) {
-            return ResponseEntity
-                    .status(ApiResultCode.NOT_FOUND.getHttpStatus())
-                    .body(BaseResponse.from(ApiResultCode.NOT_FOUND));
+            throw new ApiException(ApiResultCode.NOT_FOUND, "삭제할 샘플이 존재하지 않습니다.");
         }
 
         database.remove(id);
