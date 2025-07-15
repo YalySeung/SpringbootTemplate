@@ -16,9 +16,8 @@ repositories {
 dependencies {
 	// Spring Boot Starter
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-
-	// JPA (Hibernate 포함)
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
 	// DB 드라이버 (예: H2 or MySQL or MariaDB or Oracle)
 	runtimeOnly 'com.h2database:h2' // 테스트용 내장 DB
@@ -29,11 +28,11 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
+	// Swagger (springdoc-openapi)
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
+
 	// 테스트
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
-	// Validation
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
 	// QueryDSL (선택)
 	implementation 'com.querydsl:querydsl-jpa:5.0.0'
