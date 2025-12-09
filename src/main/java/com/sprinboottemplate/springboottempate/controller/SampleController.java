@@ -42,7 +42,7 @@ public class SampleController {
                 .filter(s -> s.getName().equalsIgnoreCase(name))
                 .findFirst()
                 .map(sample -> ResponseEntity.ok(BaseResponse.from(ApiResultCode.SUCCESS, sample)))
-                .orElseThrow(() -> new ApiException(ApiResultCode.NOT_FOUND, "해당 이름의 샘플이 없습니다."));
+                .orElseThrow(() -> new ApiException(ApiResultCode.RESOURCE_NOT_FOUND, "해당 이름의 샘플이 없습니다."));
     }
 
     @Operation(summary = "샘플 생성", description = "샘플 데이터를 생성")
@@ -51,8 +51,8 @@ public class SampleController {
         request.setId(idSequence++);
         database.put(request.getId(), request);
         return ResponseEntity
-                .status(ApiResultCode.CREATED.getHttpStatus())
-                .body(BaseResponse.from(ApiResultCode.CREATED, request));
+                .ok()
+                .body(BaseResponse.from(ApiResultCode.SUCCESS, request));
     }
 
     @Operation(summary = "샘플 수정", description = "샘플 데이터를 수정")
@@ -62,7 +62,7 @@ public class SampleController {
             @RequestBody SampleDto request) {
 
         if (!database.containsKey(id)) {
-            throw new ApiException(ApiResultCode.NOT_FOUND, "수정할 샘플이 존재하지 않습니다.");
+            throw new ApiException(ApiResultCode.RESOURCE_NOT_FOUND, "수정할 샘플이 존재하지 않습니다.");
         }
 
         request.setId(id);
@@ -76,7 +76,7 @@ public class SampleController {
             @Parameter(description = "샘플 ID", example = "1") @PathVariable Long id) {
 
         if (!database.containsKey(id)) {
-            throw new ApiException(ApiResultCode.NOT_FOUND, "삭제할 샘플이 존재하지 않습니다.");
+            throw new ApiException(ApiResultCode.RESOURCE_NOT_FOUND, "삭제할 샘플이 존재하지 않습니다.");
         }
 
         database.remove(id);
