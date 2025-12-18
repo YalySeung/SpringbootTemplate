@@ -1,4 +1,4 @@
-package com.sprinboottemplate.springboottempate.dto;
+package com.sprinboottemplate.springboottempate.common.dto;
 
 
 import com.sprinboottemplate.springboottempate.common.ApiResultCode;

@@ -1,4 +1,4 @@
-package com.sprinboottemplate.springboottempate.dto;
+package com.sprinboottemplate.springboottempate.dto.sample;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

@@ -1,6 +1,6 @@
 package com.sprinboottemplate.springboottempate.common;
 
-import com.sprinboottemplate.springboottempate.dto.BaseResponse;
+import com.sprinboottemplate.springboottempate.common.dto.BaseResponse;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;

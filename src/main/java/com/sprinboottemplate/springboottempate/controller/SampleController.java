@@ -2,8 +2,10 @@ package com.sprinboottemplate.springboottempate.controller;
 
 import com.sprinboottemplate.springboottempate.common.ApiException;
 import com.sprinboottemplate.springboottempate.common.ApiResultCode;
-import com.sprinboottemplate.springboottempate.dto.BaseResponse;
-import com.sprinboottemplate.springboottempate.dto.SampleDto;
+import com.sprinboottemplate.springboottempate.common.dto.BaseResponse;
+import com.sprinboottemplate.springboottempate.dto.sample.SampleDto;
+import com.sprinboottemplate.springboottempate.dto.sample.SampleMapper;
+import com.sprinboottemplate.springboottempate.dto.sample.SampleRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,6 +21,12 @@ public class SampleController {
 
     private final Map<Long, SampleDto> database = new HashMap<>();
     private Long idSequence = 1L;
+
+    private final SampleMapper sampleMapper;
+
+    public SampleController(SampleMapper sampleMapper) {
+        this.sampleMapper = sampleMapper;
+    }
 
     @Operation(summary = "ID로 조회", description = "PathVariable을 사용해 샘플 조회")
     @GetMapping("/{id}")
@@ -47,12 +55,15 @@ public class SampleController {
 
     @Operation(summary = "샘플 생성", description = "샘플 데이터를 생성")
     @PostMapping
-    public ResponseEntity<BaseResponse<SampleDto>> createSample(@RequestBody SampleDto request) {
+    public ResponseEntity<BaseResponse<SampleDto>> createSample(@RequestBody SampleRequest request) {
         request.setId(idSequence++);
-        database.put(request.getId(), request);
+
+        SampleDto sample = sampleMapper.toDto(request);
+
+        database.put(request.getId(), sample);
         return ResponseEntity
                 .ok()
-                .body(BaseResponse.from(ApiResultCode.SUCCESS, request));
+                .body(BaseResponse.from(ApiResultCode.SUCCESS, sample));
     }
 
     @Operation(summary = "샘플 수정", description = "샘플 데이터를 수정")
