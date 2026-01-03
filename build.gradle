@@ -23,6 +23,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 
 	// DB 드라이버 (예: H2 or MySQL or MariaDB or Oracle)
 	runtimeOnly 'com.h2database:h2' // 테스트용 내장 DB
@@ -44,6 +45,11 @@ dependencies {
 	// 테스트
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+	// (선택) JWT를 직접 검증할 경우
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
 	// QueryDSL (선택)
 	implementation "com.querydsl:querydsl-jpa:${querydslVersion}:jakarta"
 	annotationProcessor "com.querydsl:querydsl-apt:${querydslVersion}:jakarta"
@@ -62,6 +68,8 @@ tasks.withType(JavaCompile) {
 	options.annotationProcessorGeneratedSourcesDirectory = querydslDir
 	options.compilerArgs += [
 			'-Amapstruct.defaultComponentModel=spring',
-			'-Amapstruct.unmappedTargetPolicy=ERROR'
+			'-Amapstruct.unmappedTargetPolicy=ERROR',
+			'-Amapstruct.verbose=true',
+			'-Amapstruct.suppressGeneratorTimestamp=true'
 	]
 }
