@@ -1,11 +1,9 @@
 package com.sprinboottemplate.springboottempate.config.properties;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@Getter
-@Setter
+@Data
 @ConfigurationProperties(prefix = "app.security.jwt")
 public class JwtProperties {
 
@@ -31,4 +29,7 @@ public class JwtProperties {
      * 만료/nbf 검증 허용 오차
      */
     private long clockSkewSeconds = 30;
+
+    /** Access Token 만료 시간 (초) */
+    private long accessTokenTtlSeconds = 1800;
 }
