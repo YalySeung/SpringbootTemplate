@@ -7,4 +7,7 @@ import org.mapstruct.Mapping;
 public interface SampleMapper {
     @Mapping(source = "id", target = "id")
     SampleDto toDto(SampleRequest request);
+
+    @Mapping(source = "id", target = "id")
+    SampleRequest toRequest(SampleDto sampleDto);
 }
