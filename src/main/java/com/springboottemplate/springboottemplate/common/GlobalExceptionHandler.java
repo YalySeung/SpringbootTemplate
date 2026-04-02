@@ -15,10 +15,9 @@ public class GlobalExceptionHandler {
     // ✅ 일반 예외 처리
     @ExceptionHandler(Exception.class)
     public ResponseEntity<BaseResponse<Void>> handleException(Exception e) {
-        e.printStackTrace(); // 디버깅용, 운영 시 제거 또는 로깅
         return ResponseEntity
                 .ok()
-                .body(BaseResponse.from(ApiResultCode.INTERNAL_ERROR));
+                .body(BaseResponse.error(ApiResultCode.INTERNAL_ERROR, e.getMessage()));
     }
 
     // ✅ 404 또는 찾을 수 없음
@@ -26,7 +25,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<BaseResponse<Void>> handleNotFound(NoSuchElementException e) {
         return ResponseEntity
                 .ok()
-                .body(BaseResponse.from(ApiResultCode.RESOURCE_NOT_FOUND));
+                .body(BaseResponse.error(ApiResultCode.NOT_FOUND, e.getMessage()));
     }
 
     // ✅ @Valid 실패 시
@@ -44,7 +43,7 @@ public class GlobalExceptionHandler {
         String message = e.getConstraintViolations().iterator().next().getMessage();
         return ResponseEntity
                 .ok()
-                .body(BaseResponse.from(ApiResultCode.INVALID_PARAMETER_FORMAT));
+                .body(BaseResponse.error(ApiResultCode.INVALID_PARAMETER, message));
     }
 
     // ✅ 우리가 정의한 API 예외 처리

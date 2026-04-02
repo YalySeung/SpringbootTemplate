@@ -6,10 +6,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder
 @Schema(name = "BaseResponse", description = "공통 API 응답 포맷")
 public class BaseResponse<T> {
 
@@ -23,24 +25,42 @@ public class BaseResponse<T> {
     private T data;
 
     public static <T> BaseResponse<T> success(T data) {
-        return new BaseResponse<>(ApiResultCode.SUCCESS.getCode(), "요청이 성공적으로 처리되었습니다.", data);
+        return BaseResponse.<T>builder()
+                .code(ApiResultCode.SUCCESS.getCode())
+                .message(ApiResultCode.SUCCESS.getMessage())
+                .data(data)
+                .build();
     }
 
-    public static <T> BaseResponse<T> success(String message, T data) {
-        return new BaseResponse<>(ApiResultCode.SUCCESS.getCode(), message, data);
-    }
-
-    public static <T> BaseResponse<T> error(String code, String message) {
-        return new BaseResponse<>(code, message, null);
-    }
-
-    // ✅ ApiResultCode를 사용한 응답 (data 포함)
     public static <T> BaseResponse<T> from(ApiResultCode resultCode, T data) {
-        return new BaseResponse<>(resultCode.getCode(), resultCode.getMessage(), data);
+        return BaseResponse.<T>builder()
+                .code(resultCode.getCode())
+                .message(resultCode.getMessage())
+                .data(data)
+                .build();
     }
 
-    // ✅ ApiResultCode를 사용한 응답 (data 없이)
-    public static <T> BaseResponse<T> from(ApiResultCode resultCode) {
-        return from(resultCode, null);
+    public static BaseResponse<Void> error(ApiResultCode resultCode) {
+        return BaseResponse.<Void>builder()
+                .code(resultCode.getCode())
+                .message(resultCode.getMessage())
+                .data(null)
+                .build();
+    }
+
+    public static BaseResponse<Void> error(ApiResultCode resultCode, String message) {
+        return BaseResponse.<Void>builder()
+                .code(resultCode.getCode())
+                .message(message)
+                .data(null)
+                .build();
+    }
+
+    public static BaseResponse<Void> error(String code, String message) {
+        return BaseResponse.<Void>builder()
+                .code(code)
+                .message(message)
+                .data(null)
+                .build();
     }
 }
